@@ -4,13 +4,13 @@
 	$id = $_GET['id'];
 	$content = "";
 	
-	if (!($_SESSION['name'] == null))
+	if (!($_SESSION['name'] == null) && $id != "logout")
 	{
 		$content .= '
 		<ul>
 			<li><a href="?id=getSnaps">Get Snaplist</a></li>
 			<li><a href="?id=getFriends">Get Friendlist</a></li>
-			<li><a href="?id=sendPic">Send pics</li>
+			<li><a href="?id=sendSnaps">Send snaps</li>
 			<li><a href="?id=logout">Logout</a></li>
 		</ul>
 		';
@@ -45,6 +45,7 @@
 		<ul>
 			<li><a href="?id=getSnaps">Get Snaplist</a></li>
 			<li><a href="?id=getFriends">Get Friendlist</a></li>
+			<li><a href="?id=sendSnaps">Send snaps</li>
 			<li><a href="?id=logout">Logout</a></li>
 		</ul>
 		';
@@ -112,13 +113,13 @@
 		echo '<a href="'.$finalPath.'">View pic...</a>';
 	}
 	
-	if ($id == "sendPic")
+	if ($id == "sendSnaps")
 	{
 		echo '<title>Send snap</title>';
 		$snapchat = new Snapchat($_SESSION['name'],$_SESSION['pass']);
 		$content="";
 		$content .= '
-		<form action="?id=sendPic2" method="POST" enctype="multipart/form-data">
+		<form action="?id=sendSnaps2" method="POST" enctype="multipart/form-data">
 			<label>Receiver:</label><br>
 			<select name="receiver" required="required">
 				<option selected>Please choose</option>';
@@ -149,8 +150,9 @@ $content .= '</select><br>
 		echo $content;
 	}
 	
-	if ($id == "sendPic2")
+	if ($id == "sendSnaps2")
 	{
+		echo "<title>Sent snap</title>";
 		$snapchat = new Snapchat($_SESSION['name'],$_SESSION['pass']);
 		$dateityp = GetImageSize($_FILES['datei']['tmp_name']);
 		//print_r($dateityp);
