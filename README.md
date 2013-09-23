@@ -8,7 +8,7 @@ You can see his API in this repository or in his original <a href="https://githu
 How to use:
 ===============
 You can either download the webpage from this repository, or just use my running system on:<br>
-<li><a href="dev.zimmerpforte.de/snapchat">Snapchat - Zimmerpforte</a>.<br>
+<li><a href="http://dev.zimmerpforte.de/snapchat">Snapchat - Zimmerpforte</a>.<br>
 <br>
 Hints:
 ===============
