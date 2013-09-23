@@ -62,7 +62,7 @@
 		echo '<br><br><br>';
 		for ($i=0;$i<count($snaps);$i++)
 		{
-			echo $snaps[$i]->sender.' sent snap <a href="?id=download&snapid='.$snaps[$i]->id.'&sender='.$snaps[$i]->sender.'">#'.$snaps[$i]->id.'</a><br>';
+			echo $snaps[$i]->sender.' sent snap <a href="?id=download&snapid='.$snaps[$i]->id.'&sender='.$snaps[$i]->sender.'&recipient='.$snaps[$i]->recipient.'">#'.$snaps[$i]->id.'</a> to '.$snaps[$i]->recipient.'<br>';
 			//echo 'test';
 		}
 	}
@@ -99,15 +99,16 @@
 		$snapchat = new Snapchat($_SESSION['name'],$_SESSION['pass']);
 		$snapid = $_GET['snapid'];
 		$sender = $_GET['sender'];
+		$recipient = $_GET['recipient'];
 		$data = $snapchat->getMedia($snapid);
-		$prePath = 'media/download/'.$sender.'_'.$snapid.'.jpg';
+		$prePath = 'media/download/from_'.$sender.'_to_'.$recipient.'_id_'.$snapid.'.jpg';
 		if (file_exists($prePath))
 		{
-			$finalPath = 'media/download/'.$sender.'_'.$snapid.rand(0,100).'.jpg';
+			$finalPath = 'media/download/from_'.$sender.'_to_'.$recipient.'_id_'.$snapid.rand(0,100).'.jpg';
 		}
 		else
 		{
-			$finalPath = 'media/download/'.$sender.'_'.$snapid.'.jpg';
+			$finalPath = 'media/download/from_'.$sender.'_to_'.$recipient.'_id_'.$snapid.'.jpg';
 		}
 		file_put_contents($finalPath, $data);
 		echo '<a href="'.$finalPath.'">View pic...</a>';
@@ -120,8 +121,8 @@
 		$content="";
 		$content .= '
 		<form action="?id=sendSnap2" method="POST" enctype="multipart/form-data">
-			<label>Receiver:</label><br>
-			<select name="receiver" required="required">
+			<label>recipient:</label><br>
+			<select name="recipient" required="required">
 				<option selected>Please choose</option>';
 				
 				$friends = $snapchat->getFriends();
@@ -165,7 +166,7 @@ $content .= '</select><br>
 					Snapchat::MEDIA_IMAGE,
 					file_get_contents("media/upload/".$_FILES['datei']['name'])
 				);
-				$send = $snapchat->send($id, array($_POST['receiver']), $_POST['time']);
+				$send = $snapchat->send($id, array($_POST['recipient']), $_POST['time']);
 				
 				if ($send == true)
 				{
