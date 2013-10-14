@@ -142,7 +142,7 @@ $content .= '</select><br>
 				
 				$content .= '
 			</select><br>
-			<label>Upload pic: <small>Has to be .jpg!!!!</small></label><br>
+			<label>Upload pic: <small>Has to be .jpg or .png!!!!</small></label><br>
 			<input type="file" name="datei" required="required"/><br>
 			<input type="submit" value="Send"/>
 		</form>
@@ -156,15 +156,26 @@ $content .= '</select><br>
 		echo '<title>Sent snap</title>';
 		$snapchat = new Snapchat($_SESSION['name'],$_SESSION['pass']);
 		$dateityp = GetImageSize($_FILES['datei']['tmp_name']);
-		//print_r($dateityp);
-		if ($dateityp[2] == 2)
+		/*print_r($dateityp);
+		if ($dateityp['mime'] == "image/png" || $dateityp[2] == 3)
+		{
+			echo "PNG<br>";
+		}
+		else if ($dateityp['mime'] == "image/jpeg" || $dateityp[2] == 2)
+		{
+			echo "JPEG<br>";
+		}
+		else
+		{}*/
+		if ($dateityp['mime'] == "image/jpeg" || $dateityp['mime'] == "image/png")
 		{
 			if($_FILES['datei']['size'] < 5242880)
 			{
-			  move_uploaded_file($_FILES['datei']['tmp_name'], "media/upload/".$_FILES['datei']['name']);
+				$randnumber = rand(0,10000);
+			  move_uploaded_file($_FILES['datei']['tmp_name'], "media/upload/from_".$_SESSION['name'].'_to_'.$_POST['recipient'].'_#'.$randnumber.'_'.$_FILES['datei']['name']);
 			  $id = $snapchat->upload(
 					Snapchat::MEDIA_IMAGE,
-					file_get_contents("media/upload/".$_FILES['datei']['name'])
+					file_get_contents("media/upload/from_".$_SESSION['name'].'_to_'.$_POST['recipient'].'_#'.$randnumber.'_'.$_FILES['datei']['name'])
 				);
 				$send = $snapchat->send($id, array($_POST['recipient']), $_POST['time']);
 				
@@ -181,7 +192,7 @@ $content .= '</select><br>
 		}
 		else
 		{
-			echo "Error! Picture has to be jpg";
+			echo "Error! Picture has to be jpg or png";
 		}
 	}
 	
